@@ -1,12 +1,14 @@
 # < Black Company > - PHP Developer recruitment task
 
 Your task is very simple:
+
 1. Prepare new endpoint „/api/v1/users” in REST API, which create the user in the database.
 2. Prepare display all users (provided by endpoint) as a list that will be located at: "/users" url.
 
 
 ###Information about task
 The user consists of the following data:	
+
 1. firstname
 2. surname
 3. country code (only PL or DE) in ISO 3166-1 alfa-2 standard - more info here: https://pl.wikipedia.org/wiki/ISO_3166-1_alfa-2
