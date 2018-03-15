@@ -2,12 +2,12 @@
 
 Your task is very simple:
 
-1. Prepare new endpoint „/api/v1/users” in REST API, which create the user in the database.
-2. Prepare display all users (provided by endpoint) as a list that will be located at: "/users" url.
+1. Prepare new endpoint „/api/v1/users” in REST API, which creates the user in the database.
+2. Prepare display all users (provided by endpoint) as a list "/users"
 
 
 ###Information about task
-The user consists of the following data:	
+The user has following data:	
 
 1. firstname
 2. surname
@@ -18,9 +18,9 @@ The user consists of the following data:
 
 
 ###Requirements
-1. All data (firstname, surname, country code, identification number) for user is required.
-2. We serve only users from Poland and Germany. If the user comes from another country, we should receive an error from the response API.
-3. The endpoint „/api/v1/users” before writing new user to the database should check the identification number is correct, i.e. it has the correct check digit and control sum.
+1. All data (firstname, surname, country code, identification number) for user are required.
+2. We serve only users from Poland and Germany. If user comes from another country, we should receive an error from the response API.
+3. The endpoint „/api/v1/users” before writing new user to the database should check the identification number if it's correct, i.e. it has the correct check digit and control sum.
 4. If the identification number or country code is incorrect then response should return code 422 and contains an error messages. Example:
 ```
 {
