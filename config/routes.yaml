@@ -1,3 +1,8 @@
 index:
     path: /
     controller: App\Controller\UsersController::listAction
+
+api_v1_users_create:
+    path: /api/v1/users
+    methods: [POST]
+    controller: App\Controller\Api\UsersApiController::createAction
