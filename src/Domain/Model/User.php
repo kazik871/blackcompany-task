@@ -8,7 +8,6 @@
 
 namespace App\Domain\Model;
 
-
 use Ramsey\Uuid\UuidInterface;
 
 class User implements \JsonSerializable

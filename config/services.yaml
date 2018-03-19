@@ -35,11 +35,8 @@ services:
         tags:
           - { name: validator.constraint_validator }
 
-    App\Domain\Service\UserCreationService:
-        class: App\Domain\Service\UserCreationService
+    App\Domain\Factory\UserFactory:
+        class: App\Domain\Factory\UserFactory
         arguments:
-          - '@App\Domain\Repository\UserRepository'
           - '@App\Domain\Factory\PeselFactory'
           - '@App\Domain\Factory\IdentificationsnummerFactory'
-        tags:
-          - { name: validator.constraint_validator }

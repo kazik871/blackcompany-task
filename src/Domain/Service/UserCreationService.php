@@ -9,12 +9,10 @@
 namespace App\Domain\Service;
 
 
-use App\Domain\Factory\IdentityNumberFactory;
+use App\Domain\Factory\UserFactory;
 use App\Domain\Model\CountryCode;
-use App\Domain\Model\Name;
 use App\Domain\Model\User;
 use App\Domain\Repository\UserRepository;
-use Ramsey\Uuid\Uuid;
 
 class UserCreationService
 {
@@ -23,37 +21,20 @@ class UserCreationService
      */
     private $repository;
     /**
-     * @var IdentityNumberFactory[]
+     * @var UserFactory
      */
-    private $identityNumberFactories;
+    private $factory;
 
-    public function __construct(UserRepository $repository, IdentityNumberFactory ...$identityNumberFactories)
+    public function __construct(UserRepository $repository, UserFactory $factory)
     {
         $this->repository = $repository;
-        $this->identityNumberFactories = $identityNumberFactories;
+        $this->factory = $factory;
     }
 
     public function create(string $identityNumber, CountryCode $countryCode, string $firstName, string $surname): User
     {
-        $identityNumberFactory = $this->resolveIdentityNumberFactoryStrategy($countryCode);
-        $identityNumberObject = $identityNumberFactory->create($identityNumber);
-        $name = new Name($firstName, $surname);
-        $userId = Uuid::uuid4();
-
-        $user = new User($userId, $identityNumberObject, $name, $countryCode);
+        $user = $this->factory->create($identityNumber, $countryCode, $firstName, $surname);
         $this->repository->store($user);
         return $user;
-    }
-
-    private function resolveIdentityNumberFactoryStrategy(CountryCode $countryCode): IdentityNumberFactory
-    {
-        foreach ($this->identityNumberFactories as $factory) {
-            if ($factory->fitsTo($countryCode)) {
-                return $factory;
-            }
-        }
-        throw new \RuntimeException(
-            sprintf('IdentityNumberFactory for given country code does not exist: %s', $countryCode->getValue())
-        );
     }
 }
