@@ -22,6 +22,16 @@ Response
 	"identification_number": "12631904566"
 }
 ```
+Error
+```json
+{
+	"code": 422,
+	"message": "Validation Failed",
+	"errors": {
+		"identification_number": "Identification number is invalid"
+	}
+}
+```
 
 ### GET /api/v1/users
 Response
