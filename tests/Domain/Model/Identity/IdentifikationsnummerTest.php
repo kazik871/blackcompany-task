@@ -57,7 +57,8 @@ class IdentifikationsnummerTest extends TestCase
     {
         return [
             ['98600376519'],
-            ['24476800151']
+            ['24476800151'],
+            ['79168525460']
         ];
     }
 }
