@@ -22,6 +22,13 @@ final class Name
 
     public function __construct(string $firstName, string $surname)
     {
+        if (empty($firstName)) {
+            throw new \DomainException('First name can not be empty');
+        }
+        if (empty($surname)) {
+            throw new \DomainException('Surname can not be empty');
+        }
+
         $this->firstName = $firstName;
         $this->surname = $surname;
     }
