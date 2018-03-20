@@ -67,6 +67,7 @@ class UsersApiController extends Controller
             ])
             ->add('country_code', ChoiceType::class, [
                 'required' => true,
+                'message' => 'Only PL and DE registrations are allowed',
                 'choices' => CountryCode::getValues()
             ])
             ->add('identification_number', TextType::class, [
