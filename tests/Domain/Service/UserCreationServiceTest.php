@@ -9,6 +9,7 @@
 namespace App\Tests\Domain\Service;
 
 use App\Domain\Factory\IdentityNumberFactory;
+use App\Domain\Factory\UserFactory;
 use App\Domain\Model\CountryCode;
 use App\Domain\Model\IdentityNumber;
 use App\Domain\Model\User;
@@ -23,6 +24,10 @@ class UserCreationServiceTest extends TestCase
      * @var IdentityNumberFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $identityNumberFactory;
+    /**
+     * @var UserFactory
+     */
+    private $userFactory;
     /**
      * @var UserRepository|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -58,9 +63,11 @@ class UserCreationServiceTest extends TestCase
             }
         );
 
+        $this->userFactory = new UserFactory($this->identityNumberFactory);
+
         $this->userRepository = $this->getMockBuilder(UserRepository::class)->getMock();
 
-        $this->service = new UserCreationService($this->userRepository, $this->identityNumberFactory);
+        $this->service = new UserCreationService($this->userRepository, $this->userFactory);
     }
 
     public function testIfCreatesUser()
