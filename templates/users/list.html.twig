@@ -1,5 +1,62 @@
 {% extends 'base.html.twig' %}
 {% block body %}
     <h3>User list:</h3>
-    <p></p>
+    <div id="user-table">
+        <div v-if="!loaded">
+            Loading users...
+        </div>
+        <table v-if="loaded">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Country</th>
+                    <th>Identification number</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% verbatim %}
+                    <tr v-for="user in users">
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.first_name }} {{ user.surname }}</td>
+                        <td>{{ user.country_code }}</td>
+                        <td>{{ user.identification_number }}</td>
+                    </tr>
+                {% endverbatim %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        const userTable = new Vue({
+            el: '#user-table',
+            data: {
+                loaded: false,
+                users: []
+            }
+        });
+
+        fetch('/api/v1/users')
+            .then(response => response.json())
+            .then(users => {
+                userTable.$data.users = users;
+                userTable.$data.loaded = true;
+            })
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        table th, td {
+            border: 1px solid #999;
+            padding: 5px;
+            text-align: left;
+        }
+    </style>
 {% endblock %}
