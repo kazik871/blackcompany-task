@@ -13,15 +13,11 @@ use App\Domain\Model\CountryCode;
 use App\Domain\Model\User;
 use App\Domain\Repository\UserRepository;
 use App\Domain\Service\UserCreationService;
-use App\Validator\Constraint\IdentityNumberConstraint;
+use App\Form\User\UserDto;
+use App\Form\User\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\Constraints\Choice;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 class UsersApiController extends Controller
 {
@@ -52,31 +48,11 @@ class UsersApiController extends Controller
             return new Response(json_encode($error), 400, ['Content-Type' => 'application/json']);
         }
 
-        $form = $this->createFormBuilder($formData)
-            ->add('first_name', TextType::class, [
-                'required' => true,
-                'constraints' => [
-                    new NotBlank()
-                ]
-            ])
-            ->add('surname', TextType::class, [
-                'required' => true,
-                'constraints' => [
-                    new NotBlank()
-                ]
-            ])
-            ->add('country_code', ChoiceType::class, [
-                'required' => true,
-                'invalid_message' => 'Only PL and DE registrations are allowed',
-                'choices' => CountryCode::getValues()
-            ])
-            ->add('identification_number', TextType::class, [
-                'required' => true,
-                'constraints' => [
-                    new IdentityNumberConstraint(isset($formData['country_code']) ? $formData['country_code'] : null)
-                ]
-            ])
-            ->getForm();
+        $userDto = new UserDto();
+
+        $form = $this->createForm(UserType::class, $userDto, [
+            'country_code' => isset($formData['country_code']) ? $formData['country_code'] : null
+        ]);
 
         $form->handleRequest($request);
         $form->submit($formData);
@@ -84,10 +60,10 @@ class UsersApiController extends Controller
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
                 $user = $this->creationService->create(
-                    $form->get('identification_number')->getData(),
-                    CountryCode::get($form->get('country_code')->getData()),
-                    $form->get('first_name')->getData(),
-                    $form->get('surname')->getData()
+                    $userDto->getIdentificationNumber(),
+                    CountryCode::get($userDto->getCountryCode()),
+                    $userDto->getFirstName(),
+                    $userDto->getSurname()
                 );
 
                 return new Response(json_encode($user), 201, ['Content-Type' => 'application/json']);
