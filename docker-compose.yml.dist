@@ -2,6 +2,7 @@ version: '2'
 services:
   nginx:
     build: ./docker/nginx
+    restart: always
     ports:
       - "80:80"
     volumes:

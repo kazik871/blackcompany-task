@@ -18,6 +18,7 @@ install: config
 	docker-compose up -d
 	sleep 5
 	docker-compose run --rm php composer install
+	docker-compose run --rm php php bin/console doctrine:schema:create
 
 .PHONY: start
 start:
