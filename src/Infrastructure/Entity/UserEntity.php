@@ -13,6 +13,7 @@ use App\Domain\Factory\UserFactory;
 use App\Domain\Model\CountryCode;
 use App\Domain\Model\User;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Entity()
@@ -21,6 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 class UserEntity
 {
     /**
+     * @ORM\Id()
      * @ORM\Column(name="user_id")
      */
     private $id;
@@ -55,7 +57,7 @@ class UserEntity
 
     public function toDomainObject(UserFactory $factory): User {
         return $factory->createWithId(
-            $this->id,
+            Uuid::fromString($this->id),
             $this->identificationNumber,
             CountryCode::get($this->countryCode),
             $this->firstName,

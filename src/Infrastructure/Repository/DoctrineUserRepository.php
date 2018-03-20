@@ -43,6 +43,11 @@ class DoctrineUserRepository implements UserRepository
      */
     public function fetchAll(): array
     {
-        return [];
+        $repository = $this->entityManager->getRepository(UserEntity::class);
+        $entities = $repository->findAll();
+
+        return array_map(function (UserEntity $entity) {
+            return $entity->toDomainObject($this->factory);
+        }, $entities);
     }
 }

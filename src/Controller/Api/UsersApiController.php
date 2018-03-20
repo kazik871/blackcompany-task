@@ -10,6 +10,8 @@ namespace App\Controller\Api;
 
 
 use App\Domain\Model\CountryCode;
+use App\Domain\Model\User;
+use App\Domain\Repository\UserRepository;
 use App\Domain\Service\UserCreationService;
 use App\Validator\Constraint\IdentityNumberConstraint;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -27,10 +29,16 @@ class UsersApiController extends Controller
      * @var UserCreationService
      */
     private $creationService;
+    /**
+     * @var UserRepository
+     */
+    private $repository;
 
-    public function __construct(UserCreationService $creationService)
+    public function __construct(UserCreationService $creationService,
+                                UserRepository $repository)
     {
         $this->creationService = $creationService;
+        $this->repository = $repository;
     }
 
     public function createAction(Request $request)
@@ -101,6 +109,14 @@ class UsersApiController extends Controller
 
     public function listAction()
     {
+        $users = $this->repository->fetchAll();
 
+        return new Response(
+            json_encode(
+                array_map(function (User $user) {
+                    return $user->jsonSerialize();
+                }, $users)
+            )
+        );
     }
 }
