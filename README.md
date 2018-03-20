@@ -1,12 +1,52 @@
 # < Black Company > - PHP Developer recruitment task
 
+## API Reference
+
+### POST /api/v1/users
+Request
+```json
+{
+	"first_name": "Hans",
+	"surname": "Kloss",
+	"country_code": "DE",
+	"identification_number": "12631904566"
+}
+```
+Response
+```json
+{
+	"id": "9c5ad870-9e43-4c49-a974-77165529ccb9",
+	"first_name": "Hans",
+	"surname": "Kloss",
+	"country_code": "DE",
+	"identification_number": "12631904566"
+}
+```
+
+### GET /api/v1/users
+Response
+```json
+[
+	{
+		"id": "9c5ad870-9e43-4c49-a974-77165529ccb9",
+		"first_name": "Hans",
+		"surname": "Kloss",
+		"country_code": "DE",
+		"identification_number": "12631904566"
+	},
+	...
+]
+```
+
+## Original Task Description
+
 Your task is very simple:
 
 1. Prepare new endpoint „/api/v1/users” in REST API, which creates the user in the database.
 2. Prepare display all users (provided by endpoint) as a list "/users"
 
 
-###Information about task
+### Information about task
 The user has following data:	
 
 1. firstname
@@ -17,7 +57,7 @@ The user has following data:
     2. for DE will be a die Identifikationsnummer (11 digits) -> description of validation https://de.wikipedia.org/wiki/Steuerliche_Identifikationsnummer#Aufbau_der_Identifikationsnummer
 
 
-###Requirements
+### Requirements
 1. All data (firstname, surname, country code, identification number) for user are required.
 2. We serve only users from Poland and Germany. If user comes from another country, we should receive an error from the response API.
 3. The endpoint „/api/v1/users” before writing new user to the database should check the identification number if it's correct, i.e. it has the correct check digit and control sum.
@@ -51,7 +91,7 @@ The user has following data:
 ```
 
 
-###Rules
+### Rules
 
 **We would like to get a working code.**
 
@@ -62,7 +102,7 @@ The user has following data:
 **You should send us a GitHub/BitBucket link to repository (remember to keep commits clean) or zip file with the whole project.**
 
 
-##Good luck!
+## Good luck!
 
 
 
