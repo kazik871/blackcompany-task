@@ -9,7 +9,7 @@
 namespace App\Validator\Constraint;
 
 
-use App\Domain\Factory\IdentityNumberFactory;
+use App\Domain\Factory\IdentityNumberAbstractFactory;
 use App\Domain\Model\CountryCode;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -17,13 +17,13 @@ use Symfony\Component\Validator\ConstraintValidator;
 class IdentityNumberConstraintValidator extends ConstraintValidator
 {
     /**
-     * @var IdentityNumberFactory
+     * @var IdentityNumberAbstractFactory
      */
-    private $factories;
+    private $factory;
 
-    public function __construct(IdentityNumberFactory ...$factories)
+    public function __construct(IdentityNumberAbstractFactory $factory)
     {
-        $this->factories = $factories;
+        $this->factory = $factory;
     }
 
     /**
@@ -42,20 +42,10 @@ class IdentityNumberConstraintValidator extends ConstraintValidator
             return;
         }
 
-        foreach ($this->factories as $factory) {
-            if ($factory->fitsTo(CountryCode::get($countryCode))) {
-                try {
-                    $factory->create($value);
-                } catch (\DomainException $exception) {
-                    $this->context->addViolation($constraint->invalidNumberMessage);
-                }
-
-                return;
-            }
+        try {
+            $this->factory->create(CountryCode::get($countryCode), $value);
+        } catch (\DomainException $exception) {
+            $this->context->addViolation($constraint->invalidNumberMessage);
         }
-
-        throw new \RuntimeException(
-            sprintf('Can not find IdentityNumberFactory for country code: %s', $countryCode)
-        );
     }
 }

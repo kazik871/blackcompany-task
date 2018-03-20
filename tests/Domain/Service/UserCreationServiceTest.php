@@ -8,7 +8,7 @@
 
 namespace App\Tests\Domain\Service;
 
-use App\Domain\Factory\IdentityNumberFactory;
+use App\Domain\Factory\IdentityNumberAbstractFactory;
 use App\Domain\Factory\UserFactory;
 use App\Domain\Model\CountryCode;
 use App\Domain\Model\IdentityNumber;
@@ -21,7 +21,7 @@ use Ramsey\Uuid\Uuid;
 class UserCreationServiceTest extends TestCase
 {
     /**
-     * @var IdentityNumberFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var IdentityNumberAbstractFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $identityNumberFactory;
     /**
@@ -39,7 +39,7 @@ class UserCreationServiceTest extends TestCase
 
     protected function setUp()
     {
-        $this->identityNumberFactory = $this->getMockBuilder(IdentityNumberFactory::class)->getMock();
+        $this->identityNumberFactory = $this->getMockBuilder(IdentityNumberAbstractFactory::class)->getMock();
         $this->identityNumberFactory->method('fitsTo')->willReturn(true);
         $this->identityNumberFactory->method('create')->willReturnCallback(
             function (string $number) {

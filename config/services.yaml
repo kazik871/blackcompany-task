@@ -26,17 +26,3 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-
-    App\Validator\Constraint\IdentityNumberConstraintValidator:
-        class: App\Validator\Constraint\IdentityNumberConstraintValidator
-        arguments:
-          - '@App\Domain\Factory\PeselFactory'
-          - '@App\Domain\Factory\IdentificationsnummerFactory'
-        tags:
-          - { name: validator.constraint_validator }
-
-    App\Domain\Factory\UserFactory:
-        class: App\Domain\Factory\UserFactory
-        arguments:
-          - '@App\Domain\Factory\PeselFactory'
-          - '@App\Domain\Factory\IdentificationsnummerFactory'

@@ -18,13 +18,13 @@ use Ramsey\Uuid\UuidInterface;
 class UserFactory
 {
     /**
-     * @var IdentityNumberFactory[]
+     * @var IdentityNumberAbstractFactory
      */
-    private $identityNumberFactories;
+    private $factory;
 
-    public function __construct(IdentityNumberFactory ...$identityNumberFactories)
+    public function __construct(IdentityNumberAbstractFactory $factory)
     {
-        $this->identityNumberFactories = $identityNumberFactories;
+        $this->factory = $factory;
     }
 
     public function create(string $identityNumber, CountryCode $countryCode, string $firstName, string $surname): User
@@ -35,22 +35,9 @@ class UserFactory
     public function createWithId(UuidInterface $identity, string $identityNumber, CountryCode $countryCode,
                                  string $firstName, string $surname): User
     {
-        $identityNumberFactory = $this->resolveIdentityNumberFactoryStrategy($countryCode);
-        $identityNumberObject = $identityNumberFactory->create($identityNumber);
+        $identityNumberObject = $this->factory->create($countryCode, $identityNumber);
         $name = new Name($firstName, $surname);
 
         return new User($identity, $identityNumberObject, $name, $countryCode);
-    }
-
-    private function resolveIdentityNumberFactoryStrategy(CountryCode $countryCode): IdentityNumberFactory
-    {
-        foreach ($this->identityNumberFactories as $factory) {
-            if ($factory->fitsTo($countryCode)) {
-                return $factory;
-            }
-        }
-        throw new \RuntimeException(
-            sprintf('IdentityNumberFactory for given country code does not exist: %s', $countryCode->getValue())
-        );
     }
 }
